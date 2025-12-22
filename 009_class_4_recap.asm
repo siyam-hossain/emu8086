@@ -128,7 +128,9 @@ main proc
     ; ax (2 byte : lower): 1BAF
     ; wx (2 byte : higher): 1784  
                                  
-    
+        
+        
+    ;------------------------------------------------------------------------
     ;setting ax bx 00 00
     mov ax, 0000h
     mov bx, 0000h
@@ -145,6 +147,129 @@ main proc
     imul bl    
    
     ;ax <-- al * bl = -2 * 9 = FE * 09 = FF EE
+    
+    
+    ;------------------------------------------------------------------------
+    mov ax, 0000h
+    mov bx, 0000h
+    
+    
+    ;DIV: divisior
+    mov ax, 0785h
+    mov bl, 23h
+    div bl 
+    
+    ; For 8 bit divisor
+    ; al = ax / bl = 0785 / 23 = 37
+    ; quotient store at AL: 37
+    ; remainder store at AH:
+                       
+                       
+    
+    mov dx, 0h
+    mov ax, 2710h
+    mov bx, 012ch
+    div bx              
+                       
+    ; For 16 bit divisor
+    ; dx <-- ax / bx = 2710 / 012c
+    ; quotient store at AX: 00 21h
+    ; remainder store at DX: 00 64h
+    
+    
+    ;------------------------------------------------------------------------
+    mov ax, 0000h
+    mov bx, 0000h
+    
+    ;IDIV : operand
+    ; similar to DIV, but signed
+              
+    ; overflow
+    ;mov ax, -2h     ; -2h = FFFE ---> des (65534)
+    ;mov bl, 23h     ; 23h =   23 ---> des (35)
+    ;div bl
+    
+    ; 65534 / 35 = 1872  which is out of range (0-255) des for unsigned operation
+    
+    ; al <-- FFFE / 23 = 07 50 (2 byte) which is out of range 
+    ; al is 1 byte but output want to store 2 byte
+    ; overflow occured
+    
+    
+    
+    mov ax, 0000h
+    mov bx, 0000h
+    
+    mov ax, -2h     ; -2h
+    mov bl, 23h     ; 23h =   35
+    idiv bl
+    
+    ; -2 / 35 = 0 = 0h
+    ; al = 0h 
+    ; ah = -2h = FEh 
+    
+         
+    mov ax, -40h
+    mov bl, 23h
+    idiv bl 
+    
+    ; al = -40 / 23 = FFh
+    ; ah = E3 h
+         
+         
+    ;------------------------------------------------------------------------
+    mov ax, 0000h
+    mov bx, 0000h
+    
+    
+    ; CBW: convert byte to word
+    mov al, 37h
+    cbw
+    ; ax = 00 37 h (1 word = 2 byte)
+       
+       
+    mov bl, -22h ; -22 = DE
+    cbw          ; bx = 00 DE
+    
+    
+    
+    
+    ;------------------------------------------------------------------------
+    mov ax, 0000h
+    mov bx, 0000h
+    
+    
+    ; CWD : convert word to dubleword
+    ; this is meaningful only signed value
+    ; it sign-extends ax into dx
+    mov ax, 0037h   ; (sign bit = 0)000 0000 0011 0111
+    cwd
+    
+    
+    
+    mov ax, 8001h   ; AX = 1000 0000 0000 0001b
+    cwd
+    
+    ; AX in binary: 1000 0000 0000 0001 ? sign bit = 1
+    ; CWD sets every bit of DX to the sign bit:
+    ; DX = 1111 1111 1111 1111b = FFFFh
+
+    
+    
+    
+    ;------------------------------------------------------------------------
+    ; Demo 13: CMP operand1, operand2 (compare)
+    mov bl, 3bh
+    mov cl, 18h
+    cmp bl, cl      
+    ; BL - CL = 3BH - 18H = 23H (sets flags: ZF=0, SF=0, CF=0, etc.)
+    
+    
+    ;------------------------------------------------------------------------
+    ; Demo 14: NEG operand (negate)
+    mov bl, 3bh     ; BL=3BH (59 dec)
+    neg bl          ; BL = -BL (two's complement) = -59 = C5H (signed)
+    
     
     
     
