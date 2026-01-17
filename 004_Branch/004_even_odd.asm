@@ -27,6 +27,9 @@ main proc
     mov ah, 01h
     int 21h
     
+    ; convert it into digit
+    sub al, 30h
+    
     
     ;------even------
     mov ah, 0
